@@ -1,0 +1,9 @@
+Package: com.yourname.adblocker
+Name: AdBlocker
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Blocks popular mobile ad networks and trackers.
+Maintainer: YourName
+Author: YourName
+Section: Tweaks
+Depends: mobilesubstrate
