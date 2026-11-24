@@ -22,11 +22,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Theos & SDK
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git clone --recursive https://github.com/theos/theos.git $THEOS
-          curl -LO https://github.com
-          unzip -q master.zip
-          mv sdks-master/*.sdk $THEOS/sdks/
+          gh repo clone theos/theos $THEOS -- --recursive
+          gh repo clone theos/sdks ${{ runner.temp }}/sdks -- --depth 1
+          mv ${{ runner.temp }}/sdks/*.sdk $THEOS/sdks/
 
       - name: Compile Dylib
         run: |
