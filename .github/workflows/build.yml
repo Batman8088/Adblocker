@@ -4,8 +4,14 @@ on:
   push:
     branches: [ main, master ]
     paths-ignore:
-      - 'build/**' # Prevents an infinite loop when the bot commits the dylib
+      - 'build/**'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  THEOS: ${{ runner.temp }}/theos
 
 jobs:
   build:
@@ -15,9 +21,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Theos
-        run: git clone --recursive https://github.com/theos/theos.git $HOME/theos
-
+      - name: Install Theos & SDK
+        run: |
+          git clone --recursive https://github.com/theos/theos.git $THEOS
+          curl -LO https://github.com
+          unzip -q master.zip
+          mv sdks-master/*.sdk $THEOS/sdks/
 
       - name: Compile Dylib
         run: |
@@ -32,5 +41,5 @@ jobs:
           tag_name: latest-build
           name: Latest Compiled Dylib
           files: |
-            output/AdBlocker.dylib
-            output/*.deb
+            build/AdBlocker.dylib
+            build/*.deb
